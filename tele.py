@@ -6,6 +6,20 @@ app = Flask(__name__)
 BOT_TOKEN = '8105997635:AAEaHWnIvc-eiRMF33momXTDQ8dSt2N7g6M'
 TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
+subscribed_users = set()
+subscribed_users.add(1061411603)  # your test chat_id
+
+@app.route('/send_campaign', methods=['POST'])
+def send_campaign():
+    data = request.json
+    message = data.get("message", "📢 Promo time! Check this out!")
+    for chat_id in subscribed_users:
+        requests.post(f"{TELEGRAM_API}/sendMessage", json={
+            "chat_id": chat_id,
+            "text": message
+        })
+    return "Campaign sent!"
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.json
