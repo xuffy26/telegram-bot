@@ -6,9 +6,8 @@ app = Flask(__name__)
 BOT_TOKEN = '8105997635:AAEaHWnIvc-eiRMF33momXTDQ8dSt2N7g6M'
 TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
-# Store users manually for now
+# ✅ Dynamic set to store subscribed users (in memory)
 subscribed_users = set()
-subscribed_users.add(1061411603)  # Your own chat_id for testing
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
