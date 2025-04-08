@@ -6,6 +6,10 @@ app = Flask(__name__)
 BOT_TOKEN = '8105997635:AAEaHWnIvc-eiRMF33momXTDQ8dSt2N7g6M'
 TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
+# Store users manually for now
+subscribed_users = set()
+subscribed_users.add(1061411603)  # Your own chat_id for testing
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.json
@@ -20,8 +24,11 @@ def webhook():
         if text.startswith("/start"):
             referral_code = text[7:].strip() if len(text) > 6 else None
 
-            # 👉 Store chat_id, username, referral_code, etc. to DB (or print for now)
+            # 👉 Log or save new user info
             print(f"New user: {chat_id}, @{username}, referral: {referral_code}")
+
+            # ✅ Add user to broadcast list
+            subscribed_users.add(chat_id)
 
             # ✅ Send welcome message
             message = f"Hi {first_name}! 🎉 You're now subscribed to our Telegram updates!"
@@ -32,14 +39,9 @@ def webhook():
 
     return "ok"
 
-# ✅ FIXED: Moved this function outside the webhook
 @app.route('/')
 def home():
     return "Telegram bot is running!"
-
-# Store users manually for now
-subscribed_users = set()
-subscribed_users.add(1061411603)  # Add your own chat_id for testing
 
 @app.route('/send_campaign', methods=['POST'])
 def send_campaign():
