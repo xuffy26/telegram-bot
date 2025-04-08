@@ -31,9 +31,12 @@ def webhook():
             })
 
     return "ok"
-    @app.route('/')
+
+# ✅ FIXED: Moved this function outside the webhook
+@app.route('/')
 def home():
     return "Telegram bot is running!"
+
 # Store users manually for now
 subscribed_users = set()
 subscribed_users.add(1061411603)  # Add your own chat_id for testing
